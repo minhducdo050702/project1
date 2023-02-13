@@ -15,20 +15,15 @@ namespace pr1
         string strcon = ConfigurationManager.ConnectionStrings["con"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
-
         protected void Button1_Click(object sender, EventArgs e)
         {
             try
             {
                 SqlConnection con = new SqlConnection(strcon);
                 if (con.State == ConnectionState.Closed)
-                {
                     con.Open();
-
-                }
-                SqlCommand cmd = new SqlCommand("select * from member_master_tb1 where account_status='active' AND member_id='" + TextBox1.Text.Trim() + "' AND password='" + TextBox2.Text.Trim() + "'", con);
+                SqlCommand cmd = new SqlCommand("select * from member_master_tb1 where member_id='" + TextBox1.Text.Trim() + "' AND password='" + TextBox2.Text.Trim() + "'", con);
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
@@ -38,14 +33,17 @@ namespace pr1
                         Session["username"] = dr.GetValue(6).ToString();
                         Session["fullname"] = dr.GetValue(0).ToString();
                         Session["role"] = "user";
-                        Response.Redirect("homepage.aspx");
+                        string status = dr.GetValue(8).ToString();
+                        if (status == "Active")
+                            Response.Redirect("homepage.aspx");
+                        else if (status == "Pending")
+                            Response.Write("<script>alert('Tài khoản đang trong quá trình duyệt');</script>");
+                        else
+                            Response.Write("<script>alert('Tài khoản đang bị khóa');</script>");
                     }
                 }
                 else
-                {
-                    Response.Write("<script>alert('Mã số đăng nhập hoặc mật khẩu không chính xác hoặc tài khoản đang trong quá trình duyệt.');</script>");
-                }
-
+                    Response.Write("<script>alert('Mã số đăng nhập hoặc mật khẩu không chính xác.');</script>");
             }
             catch (Exception ex)
             {

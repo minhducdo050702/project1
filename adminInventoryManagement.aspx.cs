@@ -27,7 +27,7 @@ namespace pr1
         protected void LinkButton4_Click(object sender, EventArgs e)
         {
             getBookByID();
-         
+
         }
 
         protected void Button1_Click(object sender, EventArgs e)
@@ -89,76 +89,71 @@ namespace pr1
 
         void updateBookByID()
         {
-                if (checkIfBookExists())
+            if (checkIfBookExists())
+            {
+                try
                 {
-                    try
+
+                    int actual_stock = Convert.ToInt32(TextBox4.Text.Trim());
+                    int current_stock = Convert.ToInt32(TextBox5.Text.Trim());
+
+                    if (global_actual_stock == actual_stock)
                     {
 
-                        int actual_stock = Convert.ToInt32(TextBox4.Text.Trim());
-                        int current_stock = Convert.ToInt32(TextBox5.Text.Trim());
-
-                        if (global_actual_stock == actual_stock)
+                    }
+                    else
+                    {
+                        if (actual_stock < global_issued_books)
                         {
+                            Response.Write("<script>alert('Actual Stock value cannot be less than the Issued books');</script>");
+                            return;
+
 
                         }
                         else
                         {
-                            if (actual_stock < global_issued_books)
-                            {
-                                Response.Write("<script>alert('Actual Stock value cannot be less than the Issued books');</script>");
-                                return;
-
-
-                            }
-                            else
-                            {
-                                current_stock = actual_stock - global_issued_books;
-                                TextBox5.Text = "" + current_stock;
-                            }
+                            current_stock = actual_stock - global_issued_books;
+                            TextBox5.Text = "" + current_stock;
                         }
-
-                      
-
-                        SqlConnection con = new SqlConnection(strcon);
-                        if (con.State == ConnectionState.Closed)
-                        {
-                            con.Open();
-                        }
-                        SqlCommand cmd = new SqlCommand("UPDATE book_master_tbl set book_name=@book_name, author_name=@author_name, publisher_name=@publisher_name, publish_date=@publish_date, language=@language, edition=@edition, book_cost=@book_cost, no_of_pages=@no_of_pages, book_description=@book_description, actual_stock=@actual_stock, current_stock=@current_stock where book_id='" + TextBox1.Text.Trim() + "'", con);
-
-                        cmd.Parameters.AddWithValue("@book_name", TextBox2.Text.Trim());
-             
-                        cmd.Parameters.AddWithValue("@author_name", DropDownList3.SelectedItem.Value);
-                        cmd.Parameters.AddWithValue("@publisher_name", DropDownList2.SelectedItem.Value);
-                        cmd.Parameters.AddWithValue("@publish_date", TextBox3.Text.Trim());
-                        cmd.Parameters.AddWithValue("@language", DropDownList1.SelectedItem.Value);
-                        cmd.Parameters.AddWithValue("@edition", TextBox9.Text.Trim());
-                        cmd.Parameters.AddWithValue("@book_cost", TextBox10.Text.Trim());
-                        cmd.Parameters.AddWithValue("@no_of_pages", TextBox11.Text.Trim());
-                        cmd.Parameters.AddWithValue("@book_description", TextBox6.Text.Trim());
-                        cmd.Parameters.AddWithValue("@actual_stock", actual_stock.ToString());
-                        cmd.Parameters.AddWithValue("@current_stock", current_stock.ToString());
-      
-
-
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                        resetTable();
-                        Response.Write("<script>alert('Cập nhật Sách thành công');</script>");
-                        clearForm();
-
-
                     }
-                    catch (Exception ex)
+
+
+
+                    SqlConnection con = new SqlConnection(strcon);
+                    if (con.State == ConnectionState.Closed)
                     {
-                        Response.Write("<script>alert('" + ex.Message + "');</script>");
+                        con.Open();
                     }
+                    SqlCommand cmd = new SqlCommand("UPDATE book_master_tbl set book_name=@book_name, author_name=@author_name, publisher_name=@publisher_name, publish_date=@publish_date, language=@language, edition=@edition, book_cost=@book_cost, no_of_pages=@no_of_pages, book_description=@book_description, actual_stock=@actual_stock, current_stock=@current_stock where book_id='" + TextBox1.Text.Trim() + "'", con);
+                    cmd.Parameters.AddWithValue("@book_name", TextBox2.Text.Trim());
+                    cmd.Parameters.AddWithValue("@author_name", DropDownList3.SelectedItem.Value);
+                    cmd.Parameters.AddWithValue("@publisher_name", DropDownList2.SelectedItem.Value);
+                    cmd.Parameters.AddWithValue("@publish_date", TextBox3.Text.Trim());
+                    cmd.Parameters.AddWithValue("@language", DropDownList1.SelectedItem.Value);
+                    cmd.Parameters.AddWithValue("@edition", TextBox9.Text.Trim());
+                    cmd.Parameters.AddWithValue("@book_cost", TextBox10.Text.Trim());
+                    cmd.Parameters.AddWithValue("@no_of_pages", TextBox11.Text.Trim());
+                    cmd.Parameters.AddWithValue("@book_description", TextBox6.Text.Trim());
+                    cmd.Parameters.AddWithValue("@actual_stock", actual_stock.ToString());
+                    cmd.Parameters.AddWithValue("@current_stock", current_stock.ToString());
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    resetTable();
+                    Response.Write("<script>alert('Cập nhật Sách thành công');</script>");
+                    clearForm();
+
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    Response.Write("<script>alert('Mã số Sách không tồn tại');</script>");
+                    Response.Write("<script>alert('" + ex.Message + "');</script>");
                 }
             }
+            else
+            {
+                Response.Write("<script>alert('Mã số Sách không tồn tại');</script>");
+            }
+        }
 
 
         void getBookByID()
@@ -170,13 +165,13 @@ namespace pr1
                 {
                     con.Open();
                 }
-                SqlCommand cmd = new SqlCommand("SELECT * from book_master_tb1 WHERE book_id='"+TextBox1.Text.Trim()+"'", con);
+                SqlCommand cmd = new SqlCommand("SELECT * from book_master_tb1 WHERE book_id='" + TextBox1.Text.Trim() + "'", con);
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
                 {
                     while (dr.Read())
                     {
-            
+
                         TextBox2.Text = dr.GetValue(1).ToString().Trim();
                         TextBox3.Text = dr.GetValue(4).ToString().Trim();
                         TextBox9.Text = dr.GetValue(6).ToString().Trim();
@@ -187,7 +182,7 @@ namespace pr1
                         TextBox6.Text = dr.GetValue(9).ToString();
                         int temp1 = Convert.ToInt32(TextBox4.Text);
                         int temp2 = Convert.ToInt32(TextBox5.Text);
-                        TextBox7.Text=(temp1-temp2).ToString();
+                        TextBox7.Text = (temp1 - temp2).ToString();
 
                         DropDownList1.SelectedValue = dr.GetValue(5).ToString().Trim();
                         DropDownList2.SelectedValue = dr.GetValue(3).ToString().Trim();
@@ -203,7 +198,7 @@ namespace pr1
                 else
                 {
                     Response.Write("<script>alert('Mã số Sách không tồn tại');</script>");
-                        clearForm();
+                    clearForm();
                 }
                 con.Close();
 
@@ -257,7 +252,7 @@ namespace pr1
                     con.Open();
                 }
 
-                SqlCommand cmd = new SqlCommand("SELECT * from book_master_tb1 where book_id='" + TextBox1.Text.Trim() +  "';", con);
+                SqlCommand cmd = new SqlCommand("SELECT * from book_master_tb1 where book_id='" + TextBox1.Text.Trim() + "';", con);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -284,7 +279,7 @@ namespace pr1
         {
             try
             {
-     
+
 
                 SqlConnection con = new SqlConnection(strcon);
                 if (con.State == ConnectionState.Closed)
@@ -306,13 +301,13 @@ namespace pr1
                 cmd.Parameters.AddWithValue("@book_description", TextBox6.Text.Trim());
                 cmd.Parameters.AddWithValue("@actual_stock", TextBox4.Text.Trim());
                 cmd.Parameters.AddWithValue("@current_stock", TextBox4.Text.Trim());
-  
+
 
                 cmd.ExecuteNonQuery();
                 con.Close();
                 Response.Write("<script>alert('Thêm sách thành công.');</script>");
-                    resetTable();
-                    clearForm();
+                resetTable();
+                clearForm();
 
             }
             catch (Exception ex)
@@ -335,15 +330,15 @@ namespace pr1
             con.Close();
         }
         void clearForm()
-            {
-                TextBox2.Text = "";
-                TextBox3.Text = "";
-                TextBox9.Text = "";
-                TextBox10.Text = "";
-                TextBox11.Text = "";
-                TextBox4.Text = "";
-                TextBox5.Text = "";
-                TextBox6.Text = "";
-            }
+        {
+            TextBox2.Text = "";
+            TextBox3.Text = "";
+            TextBox9.Text = "";
+            TextBox10.Text = "";
+            TextBox11.Text = "";
+            TextBox4.Text = "";
+            TextBox5.Text = "";
+            TextBox6.Text = "";
+        }
     }
 }

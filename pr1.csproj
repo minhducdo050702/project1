@@ -71,6 +71,7 @@
     <Content Include="adminBookIssuing.aspx" />
     <Content Include="adminInventoryManagement.aspx" />
     <Content Include="adminMemberManagement.aspx" />
+    <Content Include="Assets\Database\ElibDatabase.sql" />
     <Content Include="Assets\imgs\about me.jpg" />
     <Content Include="Assets\imgs\library_50-premium.png" />
     <Content Include="Assets\imgs\pbzq-ts-bkdv.jpg" />
@@ -2321,7 +2322,7 @@
     <Content Include="Library\Fontawesomes\Fontawesomes\webfonts\fa-solid-900.woff2" />
     <Content Include="Library\Fontawesomes\Fontawesomes\webfonts\fa-v4compatibility.ttf" />
     <Content Include="Library\Fontawesomes\Fontawesomes\webfonts\fa-v4compatibility.woff2" />
-    <Content Include="Assets\Database\pr1" />
+    <Content Include="Assets\Database\ElibDatabase" />
     <None Include="packages.config" />
     <Content Include="Site1.Master" />
     <Content Include="web.config" />

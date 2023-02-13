@@ -24,10 +24,7 @@ namespace pr1
             {
                 SqlConnection con = new SqlConnection(strcon);
                 if (con.State == ConnectionState.Closed)
-                {
                     con.Open();
-
-                }
                 SqlCommand cmd = new SqlCommand("select * from admin_master_tb1 where username='" + TextBox1.Text.Trim() + "' AND password='" + TextBox2.Text.Trim() + "'", con);
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.HasRows)
@@ -42,10 +39,7 @@ namespace pr1
                     Response.Redirect("homepage.aspx");
                 }
                 else
-                {
                     Response.Write("<script>alert('Mã số đăng nhập hoặc mật khẩu không chính xác');</script>");
-                }
-
             }
             catch (Exception ex)
             {
