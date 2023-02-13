@@ -2323,6 +2323,7 @@
     <Content Include="Library\Fontawesomes\Fontawesomes\webfonts\fa-v4compatibility.ttf" />
     <Content Include="Library\Fontawesomes\Fontawesomes\webfonts\fa-v4compatibility.woff2" />
     <Content Include="Assets\Database\ElibDatabase" />
+    <Content Include="Assets\Report\Báo cáo Project1.docx" />
     <None Include="packages.config" />
     <Content Include="Site1.Master" />
     <Content Include="web.config" />
